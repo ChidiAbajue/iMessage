@@ -89,8 +89,20 @@ router.post("/", async (req, res) => {
         console.log("[webhook] success response sent", { type: evt.type })
         res.status(200).json({ received: true })
     } catch (error) {
-        console.error("[webhook] error in Clerk webhook: ", error)
-        res.status(400).json({ message: "Webhook Verification failed" })
+        const errorMessage = error?.message ?? String(error)
+        const errorName = error?.name ?? "WebhookError"
+
+        console.error("[webhook] verification rejected", {
+            name: errorName,
+            message: errorMessage,
+            stack: error?.stack,
+            raw: error
+        })
+
+        res.status(400).json({
+            message: "Webhook Verification failed",
+            error: errorMessage
+        })
     }
 })
 
