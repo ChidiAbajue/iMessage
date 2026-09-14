@@ -30,7 +30,7 @@ if (fs.existsSync(publicDir)){
     })
 }
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     connectDB()
     console.log('Server is up and running on Port', PORT || 3000)
 
