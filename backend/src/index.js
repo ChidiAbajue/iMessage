@@ -19,7 +19,7 @@ app.get("/health", (req, res) => {
     res.status(200).json({ok:true})
 })
 
-if (fs.existsSync(publiicDir)){
+if (fs.existsSync(publicDir)){
     app.use(express.static(publicDir))
     app.get("/{*any}", (req, res, next) => {
       res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
