@@ -32,10 +32,13 @@ app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes)
 
 
-if (fs.existsSync(publicDir)){
+if (fs.existsSync(publicDir)) {
     app.use(express.static(publicDir))
-    app.get("/{*any}", (req, res, next) => {
-      res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
+
+    app.get(/^\/(?!api).*/, (req, res, next) => {
+      res.sendFile(path.join(publicDir, "index.html"), (err) => {
+        if (err) next(err)
+      })
     })
 }
 
