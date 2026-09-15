@@ -10,7 +10,7 @@ import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js"
 import authRoutes from "./routes/auth.route.js"
 import messageRoutes from "./routes/message.route.js"
-import { server } from "./lib/socket.js"
+import { app, server } from "./lib/socket.js"
 
 const app = express()
 const PORT = process.env.PORT 
@@ -32,17 +32,10 @@ app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes)
 
 
-if (fs.existsSync(publicDir)) {
+if (fs.existsSync(publicDir)){
     app.use(express.static(publicDir))
-
-    app.get("/", (req, res) => {
-      res.sendFile(path.join(publicDir, "index.html"))
-    })
-
-    app.get(/^\/(?!api|assets|.*\.(?:js|css|png|jpg|jpeg|gif|svg|ico|webp|woff2?|ttf|map)$).*/, (req, res, next) => {
-      res.sendFile(path.join(publicDir, "index.html"), (err) => {
-        if (err) next(err)
-      })
+    app.get("/{*any}", (req, res, next) => {
+      res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
     })
 }
 
