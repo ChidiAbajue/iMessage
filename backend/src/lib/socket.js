@@ -23,10 +23,12 @@ io.on("connection", (socket) => {
 
     if(userId) userSocketMap[userId] = socket.id
     io.emit("getOnlineUsers", Object.keys(userSocketMap))
+    console.log('[socket] connection', { socketId: socket.id, userId })
     
     socket.on("disconnect", () => {
         if(userId) delete userSocketMap[userId]
         io.emit("getOnlineUsers", Object.keys(userSocketMap))
+        console.log('[socket] disconnect', { socketId: socket.id, userId })
     
     })
 })
